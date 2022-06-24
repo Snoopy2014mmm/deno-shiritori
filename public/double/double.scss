@@ -1,0 +1,10 @@
+#app {
+  background-color: rgb(196, 99, 224);
+
+  &:before {
+    background-color: #6a4172;
+  }
+  &:after {
+    background-color: #e5b7ec;
+  }
+}

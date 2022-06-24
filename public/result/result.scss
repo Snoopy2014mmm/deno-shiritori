@@ -1,0 +1,14 @@
+#app {
+  background-color: rgb(100, 78, 6);
+
+  &:before {
+    background-color: #a29f6c;
+  }
+  &:after {
+    background-color: #ece8b7;
+  }
+}
+
+.result {
+  font-size: 60px;
+}

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="styles.css">
+        <!-- development version, includes helpful console warnings -->
+        <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    </head>
+
+    <body>
+        <div id="app">
+            <h1>しりとり</h1>
+            <p>前の単語：{{ previousWord }}</p>
+            <input type="text" @keydown.enter="send" v-model="inputWord"/>
+            <button @click="send">送信</button>
+            <button @click="reset">リセット</button>
+            <p v-for="word in words">→{{word}}</p>
+        </div>
+        
+
+        <script type = "module">
+            const app = new Vue({
+                el: '#app',
+                data: {
+                    previousWord: '',
+                    inputWord: '',
+                    words: []
+                },
+                mounted: async function() {
+                    this.reset();
+                },
+                methods: {
+                    update: async function() {
+                        const response = await fetch("/shiritori");
+                        const responseJson = await response.json();
+                        this.previousWord = responseJson.previousWord;
+                        this.words = responseJson.words;
+                    },
+                    send: async function() {
+                        const inputWord = this.inputWord
+                        const response = await fetch("/shiritori", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json"},
+                            body: JSON.stringify({ nextWord: inputWord })
+                        });
+                        if(Math.floor(response.status / 100) !== 2){
+                            alert(await response.text());
+                            return;
+                        }
+                        await this.update();
+                    },
+                    reset: async function(){
+                        await fetch("/shiritori", {method: "DELETE"});
+                        await this.update();
+                    }
+                }
+            })
+
+        </script>
+    </body>
+</html>
