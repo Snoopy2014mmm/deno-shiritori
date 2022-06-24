@@ -1,19 +1,32 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <title>一人用</title>
         <meta charset="utf-8">
-        <link rel="stylesheet" href="styles.css">
+        <link rel="stylesheet" href="../assets/style.css">
         <!-- development version, includes helpful console warnings -->
         <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     </head>
 
     <body>
         <div id="app">
-            <h1>しりとり</h1>
-            <p>前の単語：{{ previousWord }}</p>
-            <input type="text" @keydown.enter="send" v-model="inputWord"/>
-            <button @click="send">送信</button>
-            <button @click="reset">リセット</button>
+            <div class="view">
+                <h1>しりとり</h1>
+                <p class="before-word">前の単語：{{ previousWord }}</p>
+                <div>
+                    <input type="text" class="input" @keypress.enter="send" v-model="inputWord"/>
+                    <button @click="send" class="btn send">送信</button>
+                    <button @click="reset" class="btn reset">リセット</button>
+                </div>
+                <div>
+                    <h2 class="record">履歴</h2>
+                    <ul class="lists">
+                        <li v-for="word in words">{{word}}</li>
+                    </ul>
+                </div>
+            </div>
+
+
             <p v-for="word in words">→{{word}}</p>
         </div>
         
@@ -30,27 +43,33 @@
                     this.reset();
                 },
                 methods: {
+                    fetch: async function(method = 'GET', headers, body) {
+                        return await fetch('/shiritori', {method: method, headers: headers, body: body})
+                    },
                     update: async function() {
-                        const response = await fetch("/shiritori");
+                        const response = await this.fetch()
                         const responseJson = await response.json();
                         this.previousWord = responseJson.previousWord;
                         this.words = responseJson.words;
                     },
                     send: async function() {
-                        const inputWord = this.inputWord
-                        const response = await fetch("/shiritori", {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json"},
-                            body: JSON.stringify({ nextWord: inputWord })
-                        });
+                        const inputWord = this.inputWord;
+                        const response = await this.fetch(
+                            'POST',
+                            { "Content-Type": "application/json"},
+                            JSON.stringify({ nextWord: inputWord })
+                        );
+
                         if(Math.floor(response.status / 100) !== 2){
                             alert(await response.text());
                             return;
                         }
+
                         await this.update();
+                        this.inputWord = '';
                     },
                     reset: async function(){
-                        await fetch("/shiritori", {method: "DELETE"});
+                        await this.fetch('DELETE')
                         await this.update();
                     }
                 }

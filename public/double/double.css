@@ -1,0 +1,13 @@
+#app {
+  background-color: rgb(196, 99, 224);
+}
+#app:before {
+  background-color: #6a4172;
+}
+#app:after {
+  background-color: #e5b7ec;
+}
+
+.unsendible {
+  background-color: #adabab;
+}/*# sourceMappingURL=double.css.map */

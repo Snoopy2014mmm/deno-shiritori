@@ -3,20 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <title>岸本のしりとり</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="waiting.css">
+    <link rel="stylesheet" href="../assets/style.css">
+    <link rel="stylesheet" href="waiting/waiting.css">
+    <!-- development version, includes helpful console warnings -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 </head>
 <body>
 <div id="app">
     <div class="view">
         <h1>合言葉</h1>
-        <p><input type="text" class="double-password"></p>
-        <p><button class="btn send">送信</button></p>
-        <p>
+        <p><input type="text" class="double-password" v-model="input"></p>
+        <p><button @click="send" class="btn send">送信</button></p>
+        <p v-if="isSent">
             待機中
             <span class="loader"><span>.</span><span>.</span><span>.</span></span>
         </p>
     </div>
 </div>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            input: '',
+            isSent: false,
+            ws: new WebSocket(location.protocol === 'https:' ? 'wss://' : 'ws://' + location.host + '/api/waiting'),
+        },
+        mounted() {
+            this.ws.addEventListener('message', (e) => {
+                const room = JSON.parse(e.data)
+                localStorage.setItem('room_id', room.roomId)
+                localStorage.setItem('player_id', room.playerId)
+                location.href = 'double'
+            })
+        },
+        methods: {
+            send: async function() {
+                this.ws.send(this.input)
+                this.isSent = true
+            },
+        },
+    })
+</script>
 </body>
 </html>

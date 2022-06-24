@@ -1,0 +1,106 @@
+html, body {
+  margin: 0;
+}
+$font-family: "游ゴシック体", YuGothic, "游ゴシック", "Yu Gothic", sans-serif;
+$normal-font-size: 23px;
+#app {
+  width: 100vw;
+  height: 100vmin;
+  background-color: rgb(39, 38, 38);
+  position: relative;
+  overflow: hidden;
+
+  $degree: 30deg;
+  &:before {
+    content: '';
+    display: block;
+    width: 140px;
+    height: 300min;
+    position: absolute;
+    top: 0;
+    left: 1200px;
+    background-color: rgb(65, 65, 65);
+    transform-origin: top right;
+    transform: rotate($degree);
+  }
+
+  &:after {
+    content: '';
+    display: block;
+    width: 100vw;
+    height: 300vmin;
+    position: absolute;
+    top: 0;
+    left: 1200px;
+    background-color: rgb(128, 127, 127);
+    transform-origin: top left;
+    transform: rotate($degree) translate(110px, -100vh);
+  }
+}
+
+.view {
+  margin: 27px;
+  color: white;
+  font-family: $font-family;
+  font-weight: lighter;
+  font-size: $normal-font-size;
+}
+
+h1 {
+  color: white;
+  font-size: 54px;
+  margin: 10px;
+}
+
+.before-word {
+  color: white;
+  font-family: $font-family;
+  font-size: $normal-font-size;
+  margin: 4px;
+}
+
+p {
+  margin: 4px;
+}
+
+.input {
+  height: 30px;
+  width: 220px;
+  margin: 4px;
+}
+
+.btn {
+  padding: 8px 15px;
+  border-radius: 10px;
+  outline: none;
+  border: 1px solid rgb(56, 81, 139);
+  color: white;
+}
+
+.send {
+  background-color: rgb(80, 113, 190);
+}
+
+.reset {
+  background-color: rgb(95, 129, 63);
+}
+
+.record {
+  font-size: $normal-font-size;
+  margin-bottom: 0;
+  overflow: scroll;
+
+}
+
+.lists {
+  margin-top: 0;
+  padding: 0;
+  display: block;
+  height: 20vmins;
+  li {
+    list-style: none;
+    &:before {
+      content: '→';
+    }
+  }
+}

@@ -2,9 +2,91 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>$Title$</title>
+  <title>二人用</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="double/double.css">
+  <!-- development version, includes helpful console warnings -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 </head>
 <body>
-$END$
+<div id="app">
+  <div class="view">
+    <h1>しりとり</h1>
+    <p class="tern">{{ isMyTurn ? 'あなた' : '相手' }}の番です</p>
+    <p class="before-word">前の単語: {{ previousWord }}</p>
+    <div>
+      <input class="input" v-model="inputWord" type="text" pattern="^[ぁ-ん]+$">
+      <button :class="{ 'btn': true, 'send': true, 'unsendible': !isMyTurn}" @click="send">送信</button>
+    </div>
+    <div>
+      <h2 class="record">履歴</h2>
+      <ul class="lists">
+        <li v-for="record in records">{{ record }}</li>
+      </ul>
+    </div>
+  </div>
+</div>
+<script>
+  new Vue({
+    el: '#app',
+    data: {
+      roomId: localStorage.getItem('room_id'),
+      playerId: localStorage.getItem('player_id'),
+      isMyTurn: false,
+      inputWord: '',
+      records: [],
+      ws: undefined,
+    },
+    computed: {
+      previousWord() {
+        if (this.records.length === 0) return "";
+        return this.records[this.records.length - 1];
+      }
+    },
+    mounted: async function() {
+      const self = this;
+
+      const wsProtocol = location.protocol === 'https:' ? 'wss://' : 'ws://'
+
+      const ws = new WebSocket(wsProtocol + location.host + '/api/double');
+
+      while (ws.readyState !== 1) await new Promise(resolve => setTimeout(resolve, 100));
+
+      ws.addEventListener('message', (e) => {
+        const res = JSON.parse(e.data);
+        if (res.type === 'update') {
+          self.isMyTurn = res.isMyTurn;
+          self.records = res.records;
+        } else if (res.type === 'finish') {
+          localStorage.setItem('reason', res.reason);
+          localStorage.setItem('result', res.result);
+          alert('Finish');
+          setTimeout(() => location.href = '/result', 3000);
+        }
+      })
+
+      ws.send(JSON.stringify({
+        type: 'setting',
+        roomId: self.roomId,
+        playerId: self.playerId
+      }));
+
+      self.ws = ws;
+    },
+    methods: {
+      send: async function() {
+        const self = this;
+        if (!self.isMyTurn) return;
+        await this.ws.send(JSON.stringify({
+          type: 'shout',
+          roomId: self.roomId,
+          playerId: self.playerId,
+          content: self.inputWord
+        }));
+        self.inputWord = '';
+      }
+    }
+  })
+</script>
 </body>
 </html>

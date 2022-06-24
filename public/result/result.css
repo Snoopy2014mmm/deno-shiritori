@@ -1,0 +1,13 @@
+#app {
+  background-color: rgb(100, 78, 6);
+}
+#app:before {
+  background-color: #a29f6c;
+}
+#app:after {
+  background-color: #ece8b7;
+}
+
+.result {
+  font-size: 60px;
+}/*# sourceMappingURL=result.css.map */

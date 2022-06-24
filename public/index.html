@@ -1,10 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>しりとり</title>
+    <!-- development version, includes helpful console warnings -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <link rel="stylesheet" href="flower/flower.css"><!-- CSS読み込み -->
 </head>
 <body>
-$END$
+<div class="cherry-blossom-container">
+    <div id="app" class="selection">
+        <button class="select-btn" @click="singleTransform">一人用</button>
+        <button class="select-btn" @click="doubleTransform">二人用</button>
+    </div>
+</div>
+<script src="flower/flower.js"></script><!-- JS読み込み -->
+<script>
+    new Vue({
+        el: '#app',
+        methods: {
+            singleTransform() {
+                location.href = 'single'
+            },
+            doubleTransform() {
+                location.href = 'waiting'
+            }
+        },
+    })
+</script>
 </body>
 </html>
