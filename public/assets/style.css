@@ -5,7 +5,7 @@ html, body {
 
 #app {
   width: 100vw;
-  height: 100vmin;
+  height: 100vh;
   background-color: rgb(39, 38, 38);
   position: relative;
   overflow: hidden;
@@ -26,7 +26,7 @@ html, body {
   content: "";
   display: block;
   width: 100vw;
-  height: 300vmin;
+  height: 300vh;
   position: absolute;
   top: 0;
   left: 1200px;
@@ -85,14 +85,14 @@ p {
 .record {
   font-size: 23px;
   margin-bottom: 0;
-  overflow: scroll;
 }
 
 .lists {
   margin-top: 0;
   padding: 0;
   display: block;
-  height: 20vmins;
+  height: 35vh;
+  overflow: scroll;
 }
 .lists li {
   list-style: none;

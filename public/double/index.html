@@ -15,7 +15,7 @@
     <p class="tern">{{ isMyTurn ? 'あなた' : '相手' }}の番です</p>
     <p class="before-word">前の単語: {{ previousWord }}</p>
     <div>
-      <input class="input" v-model="inputWord" type="text" pattern="^[ぁ-ん]+$">
+      <input class="input" v-model="inputWord" type="text" @keypress.enter="send" pattern="^[ぁ-ん]+$">
       <button :class="{ 'btn': true, 'send': true, 'unsendible': !isMyTurn}" @click="send">送信</button>
     </div>
     <div>
